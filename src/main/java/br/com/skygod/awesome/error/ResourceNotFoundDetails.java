@@ -1,34 +1,9 @@
 package br.com.skygod.awesome.error;
 
-public class ResourceNotFoundDetails {
-
-    private String title;
-    private String detail;
-    private String developerMessage;
-    private int status;
-    private long timestamp;
+public class ResourceNotFoundDetails
+        extends ErrorDetails {
 
     private ResourceNotFoundDetails() {
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public String getDetail() {
-        return detail;
-    }
-
-    public String getDeveloperMessage() {
-        return developerMessage;
-    }
-
-    public int getStatus() {
-        return status;
-    }
-
-    public long getTimestamp() {
-        return timestamp;
     }
 
     public static final class Builder {
@@ -72,11 +47,11 @@ public class ResourceNotFoundDetails {
 
         public ResourceNotFoundDetails build() {
             ResourceNotFoundDetails resourceNotFoundDetails = new ResourceNotFoundDetails();
-            resourceNotFoundDetails.detail = this.detail;
-            resourceNotFoundDetails.developerMessage = this.developerMessage;
-            resourceNotFoundDetails.timestamp = this.timestamp;
-            resourceNotFoundDetails.status = this.status;
-            resourceNotFoundDetails.title = this.title;
+            resourceNotFoundDetails.setDetail(this.detail);
+            resourceNotFoundDetails.setDeveloperMessage(this.developerMessage);
+            resourceNotFoundDetails.setTimestamp(this.timestamp);
+            resourceNotFoundDetails.setStatus(this.status);
+            resourceNotFoundDetails.setTitle(this.title);
             return resourceNotFoundDetails;
         }
     }
