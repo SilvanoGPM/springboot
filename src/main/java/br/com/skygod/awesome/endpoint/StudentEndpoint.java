@@ -1,6 +1,7 @@
 package br.com.skygod.awesome.endpoint;
 
 import br.com.skygod.awesome.error.CustomErrorType;
+import br.com.skygod.awesome.error.ResourceNotFoundException;
 import br.com.skygod.awesome.model.Student;
 import br.com.skygod.awesome.repository.StudentRepository;
 import org.springframework.http.HttpStatus;
@@ -24,11 +25,8 @@ public class StudentEndpoint {
 
     @GetMapping(path = "/{id}")
     public ResponseEntity<?> getStudentById(@PathVariable("id") Long id) {
+        verifyIfStudentExists(id);
         Student student = studentDAO.findOne(id);
-
-        if (student == null)
-            return new ResponseEntity<>(new CustomErrorType("Student not found"), HttpStatus.NOT_FOUND);
-
         return new ResponseEntity<>(student, HttpStatus.OK);
     }
 
@@ -44,14 +42,21 @@ public class StudentEndpoint {
 
     @DeleteMapping(path = "/{id}")
     public ResponseEntity<?> delete(@PathVariable Long id) {
+        verifyIfStudentExists(id);
         studentDAO.delete(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PutMapping
     public ResponseEntity<?> update(@RequestBody Student student) {
+        verifyIfStudentExists(student.getId());
         studentDAO.save(student);
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    private void verifyIfStudentExists(Long id) {
+        if (studentDAO.findOne(id) == null)
+            throw new ResourceNotFoundException("Student not found for id " + id);
     }
 
 }
