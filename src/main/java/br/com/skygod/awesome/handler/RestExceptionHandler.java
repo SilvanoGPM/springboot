@@ -1,9 +1,7 @@
 package br.com.skygod.awesome.handler;
 
-import br.com.skygod.awesome.error.ErrorDetails;
-import br.com.skygod.awesome.error.ResourceNotFoundDetails;
-import br.com.skygod.awesome.error.ResourceNotFoundException;
-import br.com.skygod.awesome.error.ValidationErrorDetails;
+import br.com.skygod.awesome.error.*;
+import org.springframework.data.mapping.PropertyReferenceException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +19,20 @@ import java.util.stream.Collectors;
 @ControllerAdvice
 public class RestExceptionHandler
         extends ResponseEntityExceptionHandler {
+
+    @ExceptionHandler(PropertyReferenceException.class)
+    public ResponseEntity<?> handlePropertyReferenceException(PropertyReferenceException prException) {
+        PropertyReferenceDetails details = PropertyReferenceDetails.Builder
+                .newBuilder()
+                .timestamp(new Date().getTime())
+                .status(HttpStatus.INTERNAL_SERVER_ERROR.value())
+                .title("Property not found")
+                .detail(prException.getMessage())
+                .developerMessage(prException.getClass().getName())
+                .build();
+
+        return new ResponseEntity<>(details, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
 
     @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity<?> handleResourceNotFoundException(ResourceNotFoundException rnfException) {

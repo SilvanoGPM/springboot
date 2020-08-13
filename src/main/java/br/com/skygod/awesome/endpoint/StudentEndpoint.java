@@ -1,11 +1,14 @@
 package br.com.skygod.awesome.endpoint;
 
-import br.com.skygod.awesome.error.CustomErrorType;
 import br.com.skygod.awesome.error.ResourceNotFoundException;
 import br.com.skygod.awesome.model.Student;
 import br.com.skygod.awesome.repository.StudentRepository;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -21,12 +24,15 @@ public class StudentEndpoint {
     }
 
     @GetMapping
-    public ResponseEntity<?> listAll() {
-        return new ResponseEntity<>(studentDAO.findAll(), HttpStatus.OK);
+    public ResponseEntity<?> listAll(Pageable pageable) {
+        return new ResponseEntity<>(studentDAO.findAll(pageable), HttpStatus.OK);
     }
 
     @GetMapping(path = "/{id}")
-    public ResponseEntity<?> getStudentById(@PathVariable("id") Long id) {
+    public ResponseEntity<?> getStudentById(@PathVariable("id") Long id,
+                                            @AuthenticationPrincipal UserDetails userDetails) {
+        System.out.println(userDetails);
+
         verifyIfStudentExists(id);
         Student student = studentDAO.findOne(id);
         return new ResponseEntity<>(student, HttpStatus.OK);
@@ -43,6 +49,7 @@ public class StudentEndpoint {
     }
 
     @DeleteMapping(path = "/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> delete(@PathVariable Long id) {
         verifyIfStudentExists(id);
         studentDAO.delete(id);

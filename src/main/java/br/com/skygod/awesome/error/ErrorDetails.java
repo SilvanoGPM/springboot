@@ -48,6 +48,7 @@ public class ErrorDetails {
         this.timestamp = timestamp;
     }
 
+
     public static final class Builder {
         private String title;
         private String detail;
