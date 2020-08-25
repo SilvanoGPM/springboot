@@ -36,8 +36,9 @@ public class CustomUserDetailService
         List<GrantedAuthority> authorityListUser = AuthorityUtils
                 .createAuthorityList("ROLE_USER");
 
-        return new org.springframework.security.
-                core.userdetails.User(user.getName(), user.getPassword(),
-                user.isAdmin() ? authorityListAdmin : authorityListUser);
+        return new org.springframework.security.core.userdetails.User(
+                user.getName(), user.getPassword(),
+                user.isAdmin() ? authorityListAdmin : authorityListUser
+        );
     }
 }

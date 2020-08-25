@@ -21,8 +21,8 @@ public class SecurityConfig
     protected void configure(HttpSecurity http) throws
             Exception {
         http.authorizeRequests()
-                .anyRequest()
-                .authenticated()
+                .antMatchers("/*/protected/**").hasAnyRole("USER")
+                .antMatchers("/*/admin/**").hasAnyRole("ADMIN")
                 .and()
                 .httpBasic()
                 .and()
