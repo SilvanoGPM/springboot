@@ -6,7 +6,8 @@ import org.hibernate.validator.constraints.NotEmpty;
 import javax.persistence.Entity;
 
 @Entity
-public class Student extends AbstractEntity {
+public class Student
+        extends AbstractEntity {
 
     @NotEmpty(message = "The name field is required!")
     private String name;
@@ -14,6 +15,14 @@ public class Student extends AbstractEntity {
     @Email
     @NotEmpty
     private String email;
+
+    @Override
+    public String toString() {
+        return "Student [ " +
+                "name: " + name +
+                ", email: " + email +
+                " ]";
+    }
 
     public String getName() {
         return name;

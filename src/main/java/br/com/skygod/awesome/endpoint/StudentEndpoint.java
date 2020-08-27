@@ -23,7 +23,7 @@ public class StudentEndpoint {
         this.studentDAO = studentDao;
     }
 
-    @GetMapping(path = "protected/students/")
+    @GetMapping(path = "protected/students")
     public ResponseEntity<?> listAll(Pageable pageable) {
         return new ResponseEntity<>(studentDAO.findAll(pageable), HttpStatus.OK);
     }
@@ -43,7 +43,7 @@ public class StudentEndpoint {
         return new ResponseEntity<>(studentDAO.findByNameIgnoreCaseContaining(name), HttpStatus.OK);
     }
 
-    @PostMapping(path = "admin/students/")
+    @PostMapping(path = "admin/students")
     public ResponseEntity<?> save(@Valid @RequestBody Student student) {
         return new ResponseEntity<>(studentDAO.save(student), HttpStatus.CREATED);
     }
@@ -56,7 +56,7 @@ public class StudentEndpoint {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @PutMapping(path = "admin/students/")
+    @PutMapping(path = "admin/students")
     public ResponseEntity<?> update(@RequestBody Student student) {
         verifyIfStudentExists(student.getId());
         studentDAO.save(student);
