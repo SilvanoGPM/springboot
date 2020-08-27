@@ -4,14 +4,18 @@ import br.com.skygod.awesome.model.PageableResponse;
 import br.com.skygod.awesome.model.Student;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.web.client.RestTemplate;
 
 public class JavaSpringClienteTest {
     public static void main(String[] args) {
         RestTemplate restTemplate = new RestTemplateBuilder()
                 .rootUri("http://localhost:8080/v1/protected/students")
+                .basicAuthorization("skygod", "skypass")
+                .build();
+
+        RestTemplate restTemplateAdmin = new RestTemplateBuilder()
+                .rootUri("http://localhost:8080/v1/admin/students")
                 .basicAuthorization("skygod", "skypass")
                 .build();
 
@@ -33,7 +37,23 @@ public class JavaSpringClienteTest {
                 new ParameterizedTypeReference<PageableResponse<Student>>() {
                 });
 
-        System.out.println(listPageable);
+        Student studentPost = new Student();
+        studentPost.setName("John Wick");
+        studentPost.setEmail("johnwick@outlook.com");
 
+        ResponseEntity<Student> exchangePost = restTemplateAdmin.exchange("/", HttpMethod.POST,
+                new HttpEntity<>(studentPost, createJSONHeader()), Student.class);
+
+        Student returnedStudentPost = restTemplateAdmin.postForObject("/", studentPost, Student.class);
+
+        System.out.println(listPageable);
+        System.out.println(exchangePost);
+        System.out.println(returnedStudentPost);
+    }
+
+    private static HttpHeaders createJSONHeader() {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        return headers;
     }
 }
