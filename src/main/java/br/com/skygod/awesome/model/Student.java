@@ -19,6 +19,7 @@ public class Student
     @Override
     public String toString() {
         return "Student [ " +
+                "id: " + id +
                 "name: " + name +
                 ", email: " + email +
                 " ]";
@@ -30,6 +31,11 @@ public class Student
     public Student(String name, String email) {
         this.name = name;
         this.email = email;
+    }
+
+    public Student(Long id, String name, String email) {
+        this(name, email);
+        this.id = id;
     }
 
     public String getName() {
