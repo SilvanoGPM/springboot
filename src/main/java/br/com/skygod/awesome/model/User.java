@@ -1,19 +1,18 @@
 package br.com.skygod.awesome.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 
 @Entity
-public class User extends AbstractEntity {
+public class User
+        extends AbstractEntity {
 
     @NotEmpty
     @Column(unique = true)
     private String username;
     @NotEmpty
-    @JsonIgnore
     private String password;
     @NotEmpty
     private String name;
