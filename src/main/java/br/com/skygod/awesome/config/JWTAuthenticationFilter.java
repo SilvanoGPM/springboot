@@ -32,11 +32,8 @@ public class JWTAuthenticationFilter
             AuthenticationException {
         try {
             User user = new ObjectMapper().readValue(request.getInputStream(), User.class);
-
-            Authentication requesting = new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword());
-            Authentication authentication = authenticationManager.authenticate(requesting);
-
-            return requesting;
+            return authenticationManager.authenticate
+                    (new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword()));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

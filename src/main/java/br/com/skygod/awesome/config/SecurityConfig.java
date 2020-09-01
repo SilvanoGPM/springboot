@@ -9,6 +9,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.web.cors.CorsConfiguration;
 
 import static br.com.skygod.awesome.config.SecurityConstants.SING_UP_URL;
 
@@ -37,11 +38,11 @@ public class SecurityConfig
     protected void configure(HttpSecurity http) throws
             Exception {
 
-        http.cors().and().csrf().disable().authorizeRequests()
+        http.cors().configurationSource(request -> new CorsConfiguration().applyPermitDefaultValues())
+                .and().csrf().disable().authorizeRequests()
                 .antMatchers(HttpMethod.GET, SING_UP_URL).permitAll()
                 .antMatchers("/*/protected/**").hasAnyRole("USER")
-                .antMatchers("/*/admin/**").hasAnyRole("ADMIN")
-                .and()
+                .antMatchers("/*/admin/**").hasAnyRole("ADMIN").and()
                 .addFilter(new JWTAuthenticationFilter(authenticationManager()))
                 .addFilter(new JWTAuthorizationFilter(authenticationManager(), customUserDetailService));
     }
